@@ -1,10 +1,15 @@
 const dotenv = require('dotenv');
 dotenv.config();
 //
+const { startMessage } = require('./messageHandler');
 const { Telegraf } = require('telegraf');
 const bot = new Telegraf(process.env.HTTP_KEY);
 // bot.mention('ysmn_kc', (ctx) => ctx.reply('u menstion someone'));
 // bot.on('text', (ctx) => ctx.reply('i love u sara'));
+
+bot.start((ctx) => {
+  ctx.reply(startMessage());
+});
 
 const getUserRole = () => {
   const roles = ['bronze', 'silver', 'gold'];
@@ -13,24 +18,81 @@ const getUserRole = () => {
 };
 
 // middleware
-bot.use((ctx, next) => {
-  ctx.reply('you send a message');
-  const role = getUserRole(ctx.message.from);
-  ctx.state.role = role;
-  next();
-});
+// bot.use((ctx, next) => {
+//   ctx.reply(
+//     'you send a message',
+//     (1,
+//     'ss',
+//     {
+//       reply_markup: {
+//         keyboard: [
+//           [
+//             {
+//               text: 'one button',
+//             },
+//           ],
+//           [
+//             {
+//               text: 'one button',
+//             },
+//             {
+//               text: 'one button',
+//             },
+//           ],
+//         ],
+//       },
+//     }),
+//   );
+//   //   ctx.telegram.sendMessage(ctx.message.chat.id, 'پیام', {
+//   //     reply_markup: {
+//   //       inline_keyboard: [
+//   //         [
+//   //           {
+//   //             text: 'one button',
+//   //             callback_data: 'buttonClick',
+//   //           },
+//   //         ],
+//   //       ],
+//   //     },
+//   //   });
 
-bot.start((ctx) => {
-  ctx.reply(`
-    سلام! به خفن ترین ربات دنیا خوش اومدین 
-    برای ایجاد کتاب روی /createBook کلیک کنید
-    `);
+//   const role = getUserRole(ctx.message.from);
+//   ctx.state.role = role;
+//   next();
+// });
+
+bot.on('text', (ctx) => {
+  ctx.reply('پیام', {
+    reply_markup: {
+      inline_keyboard: [
+        [
+          {
+            text: 'یه دکمه',
+            callback_data: 'buttonClick',
+          },
+        ],
+      ],
+    },
+  });
 });
 
 bot.command('createBook', (ctx) => {
   ctx.reply('اسم کتاب خود را وارد کنید');
   const role = ctx.state.role;
   ctx.reply(`you ${role}`);
+  console.log('new mess');
+});
+
+bot.command('bookList', (ctx) => {
+  ctx.reply('اسم کتاب خود را وارد کنید');
+});
+
+bot.action('buttonClick', (ctx) => {
+  ctx.reply('we got your mesage base on clik');
+});
+
+bot.hears('/.mahsol./', (ctx) => {
+  ctx.reply('mahsoaltt');
 });
 
 bot.launch();
