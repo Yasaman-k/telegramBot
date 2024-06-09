@@ -2,14 +2,23 @@ const dotenv = require('dotenv');
 dotenv.config();
 //
 const { startMessage } = require('./messageHandler');
+const symbolList = require('./data');
 const { Telegraf } = require('telegraf');
-const bot = new Telegraf(process.env.HTTP_KEY);
+const bot = new Telegraf(process.env.BOT_TOKEN);
 // bot.mention('ysmn_kc', (ctx) => ctx.reply('u menstion someone'));
 // bot.on('text', (ctx) => ctx.reply('i love u sara'));
 
 bot.start((ctx) => {
   ctx.reply(startMessage());
 });
+
+// bot.on('text', (ctx) => {
+//   const text = ctx.message.text;
+//   const refactorData = symbolList.reduce((acc, item) => {
+//     return { ...acc, [item.bookName]: item };
+//   }, {});
+//   console.log(refactorData);
+// });
 
 const getUserRole = () => {
   const roles = ['bronze', 'silver', 'gold'];
