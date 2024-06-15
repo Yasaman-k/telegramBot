@@ -7,7 +7,7 @@ class Application {
   constructor() {
     this.configApp();
     this.setupMongo();
-    this.insertOneCategory();
+    // this.insertOneCategory();
     this.insertOneBook();
     startBot();
   }
@@ -17,6 +17,7 @@ class Application {
       name: 'the great gatsby',
       report: 'page 89',
       meta: [{ key: '15 june', value: 'page 80' }],
+      cat: '666d56bac99373fe72c8a94d',
     });
     await book.save();
   }
