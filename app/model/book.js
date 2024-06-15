@@ -5,6 +5,10 @@ const schema = new mongoose.Schema({
   report: String,
   // date: Date,
   meta: [],
+  cat: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'category',
+  },
 });
 
 module.exports = mongoose.model('book', schema);
