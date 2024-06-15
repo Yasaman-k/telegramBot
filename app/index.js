@@ -1,16 +1,37 @@
 const { startBot } = require('./bot');
 const mongoose = require('mongoose');
+const Book = require('./model/book');
+const Category = require('./model/category');
 
 class Application {
   constructor() {
     this.configApp();
     this.setupMongo();
+    this.insertOneCategory();
+    this.insertOneBook();
+    this.test();
     startBot();
+  }
+
+  async insertOneBook() {
+    const book = new Book({
+      name: 'the great gatsby',
+      report: 'page 89',
+      meta: [{ key: '15 june', value: 'page 80' }],
+    });
+    await book.save();
+  }
+
+  async insertOneCategory() {
+    const cat = new Category({
+      title: 'tragedy',
+    });
+    await cat.save();
   }
 
   setupMongo() {
     mongoose
-      .connect('mongodb://127.0.0.1:27017')
+      .connect('mongodb://127.0.0.1:27017/book')
       .then(() => {
         console.log('db connect');
       })
