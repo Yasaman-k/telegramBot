@@ -9,7 +9,6 @@ class Application {
     this.setupMongo();
     this.insertOneCategory();
     this.insertOneBook();
-    this.test();
     startBot();
   }
 
