@@ -8,7 +8,7 @@ class Application {
     this.configApp();
     this.setupMongo();
     // this.insertOneCategory();
-    this.insertOneBook();
+    // this.insertOneBook();
     startBot();
   }
 

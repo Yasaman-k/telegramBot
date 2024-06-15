@@ -1,7 +1,8 @@
 const { Telegraf } = require('telegraf');
 // const LocalSession = require('telegraf-session-local');
-const { mainButtons } = require('./ButtonManager');
-const KeyboardMiddleware = require('./middleware/keyboardmiddleware');
+const { mainButtons } = require('./utils/ButtonManager');
+const KeyboardMiddleware = require('./middleware/Keyboardmiddleware');
+const { START_MESSAGE } = require('./utils/MessageHandler');
 
 let bot;
 
@@ -12,7 +13,7 @@ const startBot = () => {
   // bot.use is used for middlewares
   bot.use(KeyboardMiddleware);
   bot.start((ctx) => {
-    ctx.reply('hi welcome', mainButtons);
+    ctx.reply(START_MESSAGE, mainButtons);
   });
 
   bot.on();
