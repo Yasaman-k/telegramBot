@@ -1,7 +1,7 @@
 const { MAIN_BUTTON_TEXT } = require('../utils/ButtonManager');
 const Category = require('../../model/category');
 const { categoryList: categoriesListButtons } = require('../utils/ButtonManager');
-const { CATEGORY_LIST } = require('../utils/MessageHandler');
+const { CATEGORY_LIST_MESSAGE } = require('../utils/MessageHandler');
 
 module.exports = (ctx, next) => {
   if (!ctx.message) return next();
@@ -14,7 +14,7 @@ module.exports = (ctx, next) => {
 const EventListener = {
   [MAIN_BUTTON_TEXT.VIEW]: async (ctx) => {
     const categoryListData = await Category.find();
-    ctx.reply(CATEGORY_LIST, categoriesListButtons(categoryListData));
+    ctx.reply(CATEGORY_LIST_MESSAGE, categoriesListButtons(categoryListData));
   },
   // [MAIN_BUTTON_TEXT.VIEW]: (ctx) => {
   //   ctx.reply('view');
