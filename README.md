@@ -5,6 +5,6 @@ https://toplearn.com/courses/web-design/%D8%A2%D9%85%D9%88%D8%B2%D8%B4-%D8%B3%D8
 ### open it
 ### install image (mongodb) on your docker
 ### create container
-### the run  mongo db by this command
+### run  mongo db by this command
 ### ```docker exec -it mymongo mongosh```
-### if you have eror try to install mongosh 
+### if you have error try to install mongosh 
