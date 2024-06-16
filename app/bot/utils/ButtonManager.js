@@ -35,4 +35,21 @@ const categoryList = (data) => {
   };
 };
 
-module.exports = { categoryList, mainButtons, MAIN_BUTTON_TEXT };
+const booksListButtons = (data) => {
+  return {
+    reply_markup: {
+      resize_keyboard: true,
+      inline_keyboard: [
+        ...convertArrayToNColumn(data, 2).map((item) =>
+          item.map((item) => ({
+            text: item.name,
+            callback_data: `BOOK_${item._id}`,
+          })),
+        ),
+        [{ text: 'بازگشت', callback_data: 'BACK_CAT' }],
+      ],
+    },
+  };
+};
+
+module.exports = { categoryList, booksListButtons, mainButtons, MAIN_BUTTON_TEXT };
