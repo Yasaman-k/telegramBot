@@ -1,11 +1,14 @@
 const Category = require('../../model/category');
 const Book = require('../../model/book');
-const { booksListButtons } = require('../utils/ButtonManager');
-const { BOOK_LISTـMESSAGE } = require('../utils/MessageHandler');
+const { booksListButtons, MAIN_BUTTON_TEXT } = require('../utils/ButtonManager');
+const { BOOK_LISTـMESSAGE, BOOK_REPORT_MESSAGE } = require('../utils/MessageHandler');
+const { KeyboardEventListener } = require('./Keyboardmiddleware');
 
 const actionMap = {
   CAT: /^CAT_\w+/,
   BOOK: /^BOOK_\w+/,
+  BACK: /^BACK_\w+/,
+  SEARCH: /^SEARCH/,
 };
 
 module.exports = (ctx, next) => {
@@ -28,12 +31,28 @@ module.exports = (ctx, next) => {
 const EventListener = {
   CAT: async (ctx, matches) => {
     const catId = matches[0].split('_')[1];
-    const bookListData = await Book.findById(catId);
-    // bookListData.filter((item) => item.cat === cat);
+    const bookListData = await Book.find({ cat: catId });
     ctx.reply(BOOK_LISTـMESSAGE, booksListButtons(bookListData));
   },
-  //   BOOK: async (ctx) => {
-  //     const bookListData = await Book.find();
-  //     ctx.reply(BOOK_LISTـMESSAGE, booksListButtons(bookListData));
-  //   },
+  BOOK: async (ctx, matches) => {
+    const bookId = matches[0].split('_')[1];
+    const selectedBook = await Book.findById({ _id: bookId });
+    if (selectedBook) {
+      ctx.reply(BOOK_REPORT_MESSAGE);
+    }
+    return;
+    // ctx.reply(BOOK_LISTـMESSAGE, booksListButtons(bookListData));
+  },
+  BACK: (ctx, matches) => {
+    const where = matches[0].split('_')[1];
+    switch (where) {
+      case 'CAT':
+        KeyboardEventListener[MAIN_BUTTON_TEXT.VIEW](ctx);
+        break;
+      // case 'BOOK':
+      //   const cat = matches[0].split('_')[2];
+      //   EventListener.CAT(ctx, [`CAT_${cat}`]);
+      //   break;
+    }
+  },
 };

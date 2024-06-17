@@ -20,3 +20,5 @@ const EventListener = {
   //   ctx.reply('view');
   // },
 };
+
+module.exports.KeyboardEventListener = EventListener;
