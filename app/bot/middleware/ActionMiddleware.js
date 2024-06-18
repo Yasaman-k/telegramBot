@@ -55,4 +55,9 @@ const EventListener = {
       //   break;
     }
   },
+  SEARCH: (ctx) => {
+    // session.state is arbitary anything you want to write
+    ctx.session.state = 'search';
+    ctx.reply('write down your category that you look for');
+  },
 };
