@@ -23,9 +23,12 @@ const EventListener = {
     if (ctx.message) {
       ctx.session.state = undefined;
       const cat = await Category.findOne({ title: ctx.message.text });
-      const book = await Book.find({ cat: cat._id });
-      ctx.reply(`you are looking for _${ctx.message.text}_`, { parse_mode: 'Markdown' });
-      ctx.reply('these are your books related to this caregory', booksListButtons(book));
+      if (cat) {
+        const book = await Book.find({ cat: cat._id });
+        ctx.reply(`you are looking for _${ctx.message.text}_`, { parse_mode: 'Markdown' });
+        ctx.reply('these are your books related to this caregory', booksListButtons(book));
+      }
+      ctx.reply('cant find your category');
     } else {
       next();
     }
