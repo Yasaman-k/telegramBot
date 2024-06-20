@@ -1,7 +1,6 @@
-const Category = require('../../model/category');
 const Book = require('../../model/book');
 const { booksListButtons, MAIN_BUTTON_TEXT } = require('../utils/ButtonManager');
-const { BOOK_LISTـMESSAGE, BOOK_REPORT_MESSAGE } = require('../utils/MessageHandler');
+const { BOOK_LISTـMESSAGE, BOOK_REPORT_MESSAGE, WRITE_CATEGORY_MESSAGE } = require('../utils/MessageHandler');
 const { KeyboardEventListener } = require('./Keyboardmiddleware');
 
 const actionMap = {
@@ -49,7 +48,6 @@ const EventListener = {
       ctx.reply('book not found');
     }
     return;
-    // ctx.reply(BOOK_LISTـMESSAGE, booksListButtons(bookListData));
   },
   BACK: (ctx, matches) => {
     const where = matches[0].split('_')[1];
@@ -66,6 +64,6 @@ const EventListener = {
   SEARCH: (ctx) => {
     // session.state is arbitary anything you want to write
     ctx.session.state = 'search';
-    ctx.reply('write down your category that you look for');
+    ctx.reply(WRITE_CATEGORY_MESSAGE);
   },
 };

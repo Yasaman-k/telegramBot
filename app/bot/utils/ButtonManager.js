@@ -13,7 +13,7 @@ const mainButtons = {
     resize_keyboard: true,
     keyboard: [
       [{ text: MAIN_BUTTON_TEXT.COMMENT }],
-      [{ text: MAIN_BUTTON_TEXT.CREATE }, { text: MAIN_BUTTON_TEXT.VIEW }, { text: MAIN_BUTTON_TEXT.REPORTS }],
+      [{ text: MAIN_BUTTON_TEXT.CREATECat }, { text: MAIN_BUTTON_TEXT.VIEW }, { text: MAIN_BUTTON_TEXT.REPORTS }],
     ],
   },
 };
