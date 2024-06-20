@@ -14,19 +14,22 @@ class Application {
 
   async insertOneBook() {
     const book = new Book({
-      name: 'the great gatsby',
+      name: 'دزیره',
       report: 'page 89',
       meta: [{ key: '15 june', value: 'page 80' }],
-      cat: '666d56bac99373fe72c8a94d',
+      cat: ['667413c20c88be99da0af7ae', '666d8aebe9727eaeff6aa024'],
     });
     await book.save();
   }
 
   async insertOneCategory() {
-    const cat = new Category({
-      title: 'tragedy',
-    });
-    await cat.save();
+    const isExist = await Category.findOne({ title: 'تاریخی' });
+    if (!isExist) {
+      const cat = new Category({
+        title: 'تاریخی',
+      });
+      await cat.save();
+    } else console.log('this category is already exist');
   }
 
   setupMongo() {
@@ -38,12 +41,6 @@ class Application {
       .catch((err) => {
         console.log(err);
       });
-
-    async function main() {
-      const res = await mongoose.connect('mongodb://127.0.0.1:27017/');
-
-      // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
-    }
   }
 
   configApp() {
