@@ -15,6 +15,11 @@ const startBot = () => {
   bot.use(KeyboardMiddleware);
   bot.use(SessionMiddleware);
   bot.use(ActionMiddleware);
+
+  // bot.use((ctx) => {
+  //   console.log(ctx.message);
+  // });
+
   bot.start((ctx) => {
     ctx.reply(START_MESSAGE, mainButtons);
   });

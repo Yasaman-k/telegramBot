@@ -16,9 +16,9 @@ const EventListener = {
     const categoryListData = await Category.find();
     ctx.reply(CATEGORY_LIST_MESSAGE, categoriesListButtons(categoryListData));
   },
-  // [MAIN_BUTTON_TEXT.VIEW]: (ctx) => {
-  //   ctx.reply('view');
-  // },
+  [MAIN_BUTTON_TEXT.CREATECat]: (ctx) => {
+    ctx.reply('view');
+  },
 };
 
 module.exports.KeyboardEventListener = EventListener;

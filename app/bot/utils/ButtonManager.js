@@ -2,7 +2,7 @@ const { convertArrayToNColumn } = require('./DataUtil');
 
 const MAIN_BUTTON_TEXT = {
   COMMENT: 'suggestions',
-  CREATE: 'create cat',
+  CREATECat: 'create cat',
   VIEW: 'view categories',
   REPORTS: 'reports',
 };

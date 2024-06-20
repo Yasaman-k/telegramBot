@@ -4,6 +4,7 @@ const schema = new mongoose.Schema({
   name: String,
   report: String,
   // date: Date,
+  photo: String,
   meta: [],
   cat: [
     {

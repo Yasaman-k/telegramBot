@@ -39,10 +39,12 @@ const EventListener = {
     const selectedBook = await Book.findById({ _id: bookId });
     if (selectedBook) {
       ctx.reply(BOOK_REPORT_MESSAGE);
-      ctx.replyWithPhoto({ source: 'public/gatsby.jpeg' }, { caption: 'the great gatsby' });
+      //  ctx.replyWithPhoto({ source: 'public/gatsby.jpeg' }, { caption: 'the great gatsby' });
       // ctx.replyWithPhoto({
       //   url: 'https://dkstatics-public.digikala.com/digikala-products/9257abcf926b66bfdfdcf550fa1e7db82f281628_1595165673.jpg?x-oss-process=image/resize,m_lfit,h_800,w_800/format,webp/quality,q_90',
       // });
+      ctx.telegram.sendChatAction(ctx.chat.id, 'upload_photo');
+      await ctx.replyWithPhoto('AgACAgQAAxkBAAIDXGZ0ItuVib4DRXwWAaV7hNPAejHIAAJxwjEbqAABoFMUcH22TuPhVAEAAwIAA20AAzUE');
     } else {
       ctx.reply('book not found');
     }
