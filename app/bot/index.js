@@ -12,7 +12,6 @@ const startBot = () => {
   bot = new Telegraf(process.env.BOT_TOKEN);
   bot.launch();
   bot.use(new LocalSession({ database: 'session.json' }));
-  // bot.use is used for middlewares
   bot.use(KeyboardMiddleware);
   bot.use(SessionMiddleware);
   bot.use(ActionMiddleware);

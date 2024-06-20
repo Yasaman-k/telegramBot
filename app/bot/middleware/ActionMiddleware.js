@@ -39,6 +39,9 @@ const EventListener = {
     const selectedBook = await Book.findById({ _id: bookId });
     if (selectedBook) {
       ctx.reply(BOOK_REPORT_MESSAGE);
+      ctx.replyWithPhoto({ source: 'public/gatsby.jpeg' }, { caption: 'the great gatsby' });
+    } else {
+      ctx.reply('book not found');
     }
     return;
     // ctx.reply(BOOK_LISTـMESSAGE, booksListButtons(bookListData));
