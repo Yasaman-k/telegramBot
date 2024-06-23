@@ -1,7 +1,7 @@
 const { MAIN_BUTTON_TEXT } = require('../utils/ButtonManager');
 const Category = require('../../model/category');
 const { categoryList: categoriesListButtons } = require('../utils/ButtonManager');
-const { CATEGORY_LIST_MESSAGE, WRITE_CATEGORY_MESSAGE } = require('../utils/MessageHandler');
+const { CATEGORY_LIST_MESSAGE, WRITE_CATEGORY_MESSAGE, WRITE_BOOK_MESSAGE } = require('../utils/MessageHandler');
 
 module.exports = (ctx, next) => {
   if (!ctx.message) return next();
@@ -22,6 +22,9 @@ const EventListener = {
   [MAIN_BUTTON_TEXT.CREATECat]: (ctx) => {
     ctx.session.ADDCAT = 'addCat';
     ctx.reply(WRITE_CATEGORY_MESSAGE);
+  },
+  [MAIN_BUTTON_TEXT.CREATEBook]: (ctx) => {
+    ctx.reply(WRITE_BOOK_MESSAGE);
   },
 };
 

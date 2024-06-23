@@ -1,10 +1,9 @@
 const { convertArrayToNColumn } = require('./DataUtil');
 
 const MAIN_BUTTON_TEXT = {
-  COMMENT: 'suggestions',
   CREATECat: 'create cat',
   VIEW: 'view categories',
-  REPORTS: 'reports',
+  CREATEBook: 'create book',
 };
 
 // use  option+shift to select each line
@@ -12,8 +11,8 @@ const mainButtons = {
   reply_markup: {
     resize_keyboard: true,
     keyboard: [
-      [{ text: MAIN_BUTTON_TEXT.COMMENT }],
-      [{ text: MAIN_BUTTON_TEXT.CREATECat }, { text: MAIN_BUTTON_TEXT.VIEW }, { text: MAIN_BUTTON_TEXT.REPORTS }],
+      [{ text: MAIN_BUTTON_TEXT.CREATEBook }],
+      [{ text: MAIN_BUTTON_TEXT.CREATECat }, { text: MAIN_BUTTON_TEXT.VIEW }],
     ],
   },
 };

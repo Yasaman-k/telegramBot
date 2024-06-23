@@ -6,6 +6,7 @@ const { insertOneCategory } = require('../utils/api');
 const STATE_LIST = {
   SEARCH: 'search',
   ADDCAT: 'addCat',
+  ADDBOOK: 'addBook',
 };
 
 module.exports = (ctx, next) => {
