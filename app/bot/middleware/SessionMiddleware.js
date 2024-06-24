@@ -2,11 +2,14 @@ const Category = require('../../model/category');
 const Book = require('../../model/book');
 const { booksListButtons } = require('../utils/ButtonManager');
 const { insertOneCategory } = require('../utils/api');
+const { adminCommentMessage } = require('../utils/MessageHandler');
 
 const STATE_LIST = {
   SEARCH: 'search',
   ADDCAT: 'addCat',
   ADDBOOK: 'addBook',
+  COMMENT_TYPE_STATE: 'commentType',
+  COMMENT_ENTER: 'commentEnter',
 };
 
 module.exports = (ctx, next) => {
@@ -47,5 +50,35 @@ const EventListener = {
       ctx.session.ADDCAT = undefined;
       await insertOneCategory(ctx.message.text, ctx);
     }
+    next();
+  },
+  [STATE_LIST.COMMENT_TYPE_STATE]: async (ctx, next) => {
+    ctx.session.state = undefined;
+    //update.callback_query  this is the action button
+    console.log(ctx.update.callback_query);
+    if (ctx.update.callback_query) {
+      const data = ctx.update.callback_query.data;
+      ctx.session.state = STATE_LIST.COMMENT_ENTER;
+      ctx.session.comment = { commentType: data };
+      ctx.reply('موضوع خود را بنوسیسد');
+    } else {
+      next();
+    }
+  },
+  [STATE_LIST.COMMENT_ENTER]: (ctx, next) => {
+    ctx.session.state = undefined;
+    if (ctx.message) {
+      const data = ctx.message.text;
+      ctx.reply('comment grefte shod');
+      ctx.telegram.sendMessage(
+        process.env.ADMIN_ID,
+        adminCommentMessage({ type: ctx.session.comment.commentType, text: data }, ctx.message.from),
+      );
+      ctx.session.comment = undefined;
+    } else {
+      next();
+    }
   },
 };
+
+module.exports.STATE_LIST = STATE_LIST;

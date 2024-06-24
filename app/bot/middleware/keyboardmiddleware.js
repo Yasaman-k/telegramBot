@@ -1,7 +1,8 @@
-const { MAIN_BUTTON_TEXT } = require('../utils/ButtonManager');
+const { MAIN_BUTTON_TEXT, commentsButtons } = require('../utils/ButtonManager');
 const Category = require('../../model/category');
 const { categoryList: categoriesListButtons } = require('../utils/ButtonManager');
 const { CATEGORY_LIST_MESSAGE, WRITE_CATEGORY_MESSAGE, WRITE_BOOK_MESSAGE } = require('../utils/MessageHandler');
+const { STATE_LIST } = require('./SessionMiddleware');
 
 module.exports = (ctx, next) => {
   if (!ctx.message) return next();
@@ -23,8 +24,9 @@ const EventListener = {
     ctx.session.ADDCAT = 'addCat';
     ctx.reply(WRITE_CATEGORY_MESSAGE);
   },
-  [MAIN_BUTTON_TEXT.CREATEBook]: (ctx) => {
-    ctx.reply(WRITE_BOOK_MESSAGE);
+  [MAIN_BUTTON_TEXT.COMMENT]: (ctx) => {
+    ctx.session.state = STATE_LIST.COMMENT_TYPE_STATE;
+    ctx.reply(WRITE_BOOK_MESSAGE, commentsButtons);
   },
 };
 

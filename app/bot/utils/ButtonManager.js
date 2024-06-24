@@ -4,6 +4,7 @@ const MAIN_BUTTON_TEXT = {
   CREATECat: 'create cat',
   VIEW: 'view categories',
   CREATEBook: 'create book',
+  COMMENT: 'پیشنهادات و انتقادات',
 };
 
 // use  option+shift to select each line
@@ -12,7 +13,21 @@ const mainButtons = {
     resize_keyboard: true,
     keyboard: [
       [{ text: MAIN_BUTTON_TEXT.CREATEBook }],
-      [{ text: MAIN_BUTTON_TEXT.CREATECat }, { text: MAIN_BUTTON_TEXT.VIEW }],
+      [{ text: MAIN_BUTTON_TEXT.CREATECat }, { text: MAIN_BUTTON_TEXT.VIEW }, { text: MAIN_BUTTON_TEXT.COMMENT }],
+    ],
+  },
+};
+
+const commentsButtons = {
+  reply_markup: {
+    resize_keyboard: true,
+    inline_keyboard: [
+      [
+        {
+          text: 'انتفاد',
+          callback_data: 'یک انتقاد جدید',
+        },
+      ],
     ],
   },
 };
@@ -51,4 +66,4 @@ const booksListButtons = (data) => {
   };
 };
 
-module.exports = { categoryList, booksListButtons, mainButtons, MAIN_BUTTON_TEXT };
+module.exports = { categoryList, booksListButtons, mainButtons, MAIN_BUTTON_TEXT, commentsButtons };

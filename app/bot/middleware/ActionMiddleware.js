@@ -2,6 +2,7 @@ const Book = require('../../model/book');
 const { booksListButtons, MAIN_BUTTON_TEXT } = require('../utils/ButtonManager');
 const { BOOK_LISTـMESSAGE, BOOK_REPORT_MESSAGE, WRITE_CATEGORY_MESSAGE } = require('../utils/MessageHandler');
 const { KeyboardEventListener } = require('./Keyboardmiddleware');
+const { STATE_LIST } = require('./SessionMiddleware');
 
 const actionMap = {
   CAT: /^CAT_\w+/,
@@ -63,7 +64,7 @@ const EventListener = {
   },
   SEARCH: (ctx) => {
     // session.state is arbitary anything you want to write
-    ctx.session.state = 'search';
+    ctx.session.state = STATE_LIST.SEARCH;
     ctx.reply(WRITE_CATEGORY_MESSAGE);
   },
 };
