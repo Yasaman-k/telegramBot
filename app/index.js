@@ -1,14 +1,13 @@
 const { startBot } = require('./bot');
 const mongoose = require('mongoose');
-const Book = require('./model/book');
-const Category = require('./model/category');
+const { insertOneBook } = require('../app/bot/utils/api');
 
 class Application {
   constructor() {
     this.configApp();
     this.setupMongo();
     // this.insertOneCategory();
-    // this.insertOneBook();
+    // insertOneBook();
     startBot();
   }
 

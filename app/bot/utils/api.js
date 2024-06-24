@@ -1,13 +1,14 @@
 const Category = require('../../model/category');
+const Book = require('../../model/book');
 
-const insertOneBook = async (data, ctx) => {
-  ctx.reply('write the name');
-  ctx.reply('write category');
-  ctx.reply('upload photo');
+const insertOneBook = async () => {
+  // ctx.reply('write the name');
+  // ctx.reply('write category');
+  // ctx.reply('upload photo');
 
   const book = new Book({
-    name: name,
-    photo: photo,
+    name: 'دزیره',
+    photo: 'AgACAgQAAxkBAAIEJmZ5QrMVUGWoXaLxX-xXf9BdGEteAAI1wDEbSSPIU65An73xa27uAQADAgADcwADNQQ',
     cat: ['667413c20c88be99da0af7ae', '666d8aebe9727eaeff6aa024'],
   });
   await book.save();

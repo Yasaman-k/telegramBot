@@ -55,7 +55,6 @@ const EventListener = {
   [STATE_LIST.COMMENT_TYPE_STATE]: async (ctx, next) => {
     ctx.session.state = undefined;
     //update.callback_query  this is the action button
-    console.log(ctx.update.callback_query);
     if (ctx.update.callback_query) {
       const data = ctx.update.callback_query.data;
       ctx.session.state = STATE_LIST.COMMENT_ENTER;
