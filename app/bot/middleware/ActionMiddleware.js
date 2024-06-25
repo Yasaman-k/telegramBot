@@ -1,5 +1,5 @@
 const Book = require('../../model/book');
-const { booksListButtons, MAIN_BUTTON_TEXT, booksListButtonsDetail } = require('../utils/ButtonManager');
+const { booksListButtons, MAIN_BUTTON_TEXT, eachBookButtons } = require('../utils/ButtonManager');
 const { BOOK_LISTـMESSAGE, WRITE_CATEGORY_MESSAGE } = require('../utils/MessageHandler');
 const { KeyboardEventListener } = require('./Keyboardmiddleware');
 const { STATE_LIST } = require('./SessionMiddleware');
@@ -46,7 +46,8 @@ const EventListener = {
       if (selectedBook.photo) {
         const books = await Book.find();
         await ctx.telegram.sendChatAction(ctx.chat.id, 'upload_photo');
-        await ctx.replyWithPhoto(selectedBook.photo, booksListButtonsDetail(books, 'caption'));
+        await ctx.replyWithPhoto(selectedBook.photo, eachBookButtons);
+        // booksListButtonsDetail(books, 'caption')
         // ctx.telegram.sendPhoto('', {}, {});
       } else {
         console.log('another photo');

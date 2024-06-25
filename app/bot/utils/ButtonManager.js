@@ -18,6 +18,20 @@ const mainButtons = {
   },
 };
 
+const eachBookButtons = {
+  reply_markup: {
+    resize_keyboard: true,
+    inline_keyboard: [
+      [
+        {
+          text: 'افزودن به لیست کتابخانه',
+          callback_data: 'add to my library',
+        },
+      ],
+    ],
+  },
+};
+
 const commentsButtons = {
   reply_markup: {
     resize_keyboard: true,
@@ -91,4 +105,5 @@ module.exports = {
   MAIN_BUTTON_TEXT,
   commentsButtons,
   booksListButtonsDetail,
+  eachBookButtons,
 };
