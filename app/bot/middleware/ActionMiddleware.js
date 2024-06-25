@@ -1,5 +1,5 @@
 const Book = require('../../model/book');
-const { booksListButtons, MAIN_BUTTON_TEXT, commentsButtons } = require('../utils/ButtonManager');
+const { booksListButtons, MAIN_BUTTON_TEXT, booksListButtonsDetail } = require('../utils/ButtonManager');
 const { BOOK_LISTـMESSAGE, WRITE_CATEGORY_MESSAGE } = require('../utils/MessageHandler');
 const { KeyboardEventListener } = require('./Keyboardmiddleware');
 const { STATE_LIST } = require('./SessionMiddleware');
@@ -44,8 +44,10 @@ const EventListener = {
       //   url: 'https://dkstatics-public.digikala.com/digikala-products/9257abcf926b66bfdfdcf550fa1e7db82f281628_1595165673.jpg?x-oss-process=image/resize,m_lfit,h_800,w_800/format,webp/quality,q_90',
       // });
       if (selectedBook.photo) {
+        const books = await Book.find();
         await ctx.telegram.sendChatAction(ctx.chat.id, 'upload_photo');
-        await ctx.replyWithPhoto(selectedBook.photo, commentsButtons);
+        await ctx.replyWithPhoto(selectedBook.photo, booksListButtonsDetail(books, 'caption'));
+        // ctx.telegram.sendPhoto('', {}, {});
       } else {
         console.log('another photo');
       }

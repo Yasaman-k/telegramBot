@@ -66,4 +66,29 @@ const booksListButtons = (data) => {
   };
 };
 
-module.exports = { categoryList, booksListButtons, mainButtons, MAIN_BUTTON_TEXT, commentsButtons };
+const booksListButtonsDetail = (data, caption = '') => {
+  return {
+    reply_markup: {
+      resize_keyboard: true,
+      inline_keyboard: [
+        ...convertArrayToNColumn(data, 2).map((item) =>
+          item.map((item) => ({
+            text: item.name,
+            callback_data: `BOOK_${item._id}`,
+          })),
+        ),
+        [{ text: 'بازگشت', callback_data: 'BACK_CAT' }],
+      ],
+    },
+    caption,
+  };
+};
+
+module.exports = {
+  categoryList,
+  booksListButtons,
+  mainButtons,
+  MAIN_BUTTON_TEXT,
+  commentsButtons,
+  booksListButtonsDetail,
+};
