@@ -32,16 +32,18 @@ module.exports = (ctx, next) => {
 
 const EventListener = {
   [STATE_LIST.SEARCH]: async (ctx, next) => {
+    ctx.session.state = undefined;
     if (ctx.message) {
-      ctx.session.state = undefined;
-      const cat = await Category.findOne({ title: ctx.message.text });
+      const text = ctx.message.text;
+      const cat = await Category.findOne({ title: { $regex: text } });
       if (cat) {
         const book = await Book.find({ cat: cat._id });
         ctx.reply(`you are looking for _${ctx.message.text}_`, { parse_mode: 'Markdown' });
         ctx.reply('these are your books related to this caregory', booksListButtons(book));
+      } else {
+        ctx.reply('can not find your category');
       }
     } else {
-      ctx.reply('cant find your category');
       next();
     }
   },
