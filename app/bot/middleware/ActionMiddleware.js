@@ -1,5 +1,6 @@
 const Book = require('../../model/book');
-const { booksListButtons, MAIN_BUTTON_TEXT, eachBookButtons } = require('../utils/ButtonManager');
+const User = require('../../model/user');
+const { booksListButtons, MAIN_BUTTON_TEXT, bookDetailButtons } = require('../utils/ButtonManager');
 const { BOOK_LISTـMESSAGE, WRITE_CATEGORY_MESSAGE } = require('../utils/MessageHandler');
 const { KeyboardEventListener } = require('./Keyboardmiddleware');
 const { STATE_LIST } = require('./SessionMiddleware');
@@ -9,6 +10,7 @@ const actionMap = {
   BOOK: /^BOOK_\w+/,
   BACK: /^BACK_\w+/,
   SEARCH: /^SEARCH/,
+  FAV: /^FAV_\w+/,
 };
 
 module.exports = (ctx, next) => {
@@ -18,6 +20,7 @@ module.exports = (ctx, next) => {
     const actionValues = Object.values(actionMap);
     for (let i = 0; i < actionValues.length; i++) {
       const isMatch = callback_data.match(actionValues[i]);
+
       if (isMatch && EventListener[Object.keys(actionMap)[i]]) {
         return EventListener[Object.keys(actionMap)[i]](ctx, isMatch);
       }
@@ -44,13 +47,12 @@ const EventListener = {
       //   url: 'https://dkstatics-public.digikala.com/digikala-products/9257abcf926b66bfdfdcf550fa1e7db82f281628_1595165673.jpg?x-oss-process=image/resize,m_lfit,h_800,w_800/format,webp/quality,q_90',
       // });
       if (selectedBook.photo) {
-        const books = await Book.find();
         await ctx.telegram.sendChatAction(ctx.chat.id, 'upload_photo');
-        await ctx.replyWithPhoto(selectedBook.photo, eachBookButtons);
+        await ctx.replyWithPhoto(selectedBook.photo, bookDetailButtons(selectedBook, 'caption'));
         // booksListButtonsDetail(books, 'caption')
         // ctx.telegram.sendPhoto('', {}, {});
       } else {
-        console.log('another photo');
+        console.log('default photo');
       }
       // await ctx.replyWithPhoto('AgACAgQAAxkBAAIDXGZ0ItuVib4DRXwWAaV7hNPAejHIAAJxwjEbqAABoFMUcH22TuPhVAEAAwIAA20AAzUE');
     } else {
@@ -74,5 +76,22 @@ const EventListener = {
     // session.state is arbitary anything you want to write
     ctx.session.state = STATE_LIST.SEARCH;
     ctx.reply(WRITE_CATEGORY_MESSAGE);
+  },
+  FAV: async (ctx, matches) => {
+    const bookId = matches[0].split('_')[1];
+    const userTel = ctx.update.callback_query.from.id;
+    let user = await User.findOne({ telId: userTel.id });
+    if (!user) {
+      user = new User({
+        telId: userTel.id,
+        first_name: userTel.first_name,
+        username: userTel.username,
+        fav: [bookId],
+      });
+    } else {
+      if (user.fav.includes(bookId)) user.fav.push(bookId);
+    }
+    await user.save();
+    ctx.reply('add to favorite');
   },
 };

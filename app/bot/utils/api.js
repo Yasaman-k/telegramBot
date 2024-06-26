@@ -31,6 +31,7 @@ const insertOneCategory = async (title, ctx) => {
       title,
     });
     await cat.save();
+    ctx.reply('this category successfully add');
   } else ctx.reply('this category is already exist');
 };
 

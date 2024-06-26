@@ -52,7 +52,7 @@ const EventListener = {
       ctx.session.ADDCAT = undefined;
       await insertOneCategory(ctx.message.text, ctx);
     }
-    next();
+    // next();
   },
   [STATE_LIST.COMMENT_TYPE_STATE]: async (ctx, next) => {
     ctx.session.state = undefined;

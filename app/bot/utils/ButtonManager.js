@@ -1,8 +1,8 @@
 const { convertArrayToNColumn } = require('./DataUtil');
 
 const MAIN_BUTTON_TEXT = {
-  CREATECat: 'create cat',
-  VIEW: 'view categories',
+  CREATECat: 'ایجاد ژانر',
+  VIEW: 'ژانر ها',
   CREATEBook: 'create book',
   COMMENT: 'پیشنهادات و انتقادات',
 };
@@ -18,18 +18,28 @@ const mainButtons = {
   },
 };
 
-const eachBookButtons = {
-  reply_markup: {
-    resize_keyboard: true,
-    inline_keyboard: [
-      [
-        {
-          text: 'افزودن به لیست کتابخانه',
-          callback_data: 'add to my library',
-        },
+const bookDetailButtons = (book, caption = '') => {
+  return {
+    reply_markup: {
+      resize_keyboard: true,
+      inline_keyboard: [
+        [
+          {
+            text: 'افزودن به کتابخانه',
+            callback_data: `CART_${book._id}`,
+          },
+        ],
+        [{ text: 'افزودن به لیست علاقه مندی', callback_data: `FAV_${book._id}` }],
+        [
+          {
+            text: 'بازگشت',
+            callback_data: 'BACK_CAT',
+          },
+        ],
       ],
-    ],
-  },
+    },
+    caption,
+  };
 };
 
 const commentsButtons = {
@@ -105,5 +115,5 @@ module.exports = {
   MAIN_BUTTON_TEXT,
   commentsButtons,
   booksListButtonsDetail,
-  eachBookButtons,
+  bookDetailButtons,
 };
