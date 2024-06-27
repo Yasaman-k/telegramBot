@@ -16,6 +16,8 @@ const startBot = () => {
   bot.use(SessionMiddleware);
   bot.use(ActionMiddleware);
 
+  //hi
+
   bot.start((ctx) => {
     ctx.reply(START_MESSAGE, mainButtons);
   });

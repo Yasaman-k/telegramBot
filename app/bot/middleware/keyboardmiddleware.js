@@ -26,7 +26,7 @@ const EventListener = {
   },
   [MAIN_BUTTON_TEXT.COMMENT]: (ctx) => {
     ctx.session.state = STATE_LIST.COMMENT_TYPE_STATE;
-    ctx.reply(WRITE_BOOK_MESSAGE, commentsButtons);
+    ctx.reply('پیشنهادات و انتقادات ', commentsButtons);
   },
 };
 

@@ -18,7 +18,7 @@ const mainButtons = {
   },
 };
 
-const bookDetailButtons = (book, caption = '') => {
+const bookDetailButtons = (book, caption = '', existInFav) => {
   return {
     reply_markup: {
       resize_keyboard: true,
@@ -29,7 +29,12 @@ const bookDetailButtons = (book, caption = '') => {
             callback_data: `CART_${book._id}`,
           },
         ],
-        [{ text: 'افزودن به لیست علاقه مندی', callback_data: `FAV_${book._id}` }],
+        [
+          {
+            text: existInFav ? 'حذف از لیست علاقه مندی' : 'افزودن به لیست علاقه مندی',
+            callback_data: `FAV_${book._id}`,
+          },
+        ],
         [
           {
             text: 'بازگشت',

@@ -14,6 +14,7 @@ const schema = new mongoose.Schema({
   bookStorage: [
     {
       bookId: mongoose.Schema.Types.ObjectId,
+      // ref: 'book',
     },
   ],
   buys: [BookSchema],

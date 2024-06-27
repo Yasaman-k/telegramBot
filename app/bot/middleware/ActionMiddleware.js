@@ -40,17 +40,18 @@ const EventListener = {
   BOOK: async (ctx, matches) => {
     const bookId = matches[0].split('_')[1];
     const selectedBook = await Book.findById({ _id: bookId });
+    const userTel = ctx.update.callback_query.from.id;
+    let user = await User.findOne({ telId: userTel.id });
+
     if (selectedBook) {
-      // ctx.reply(BOOK_REPORT_MESSAGE);
+      const existInFav = user?.fav?.includes(bookId);
       //  ctx.replyWithPhoto({ source: 'public/gatsby.jpeg' }, { caption: 'the great gatsby' });
       // ctx.replyWithPhoto({
       //   url: 'https://dkstatics-public.digikala.com/digikala-products/9257abcf926b66bfdfdcf550fa1e7db82f281628_1595165673.jpg?x-oss-process=image/resize,m_lfit,h_800,w_800/format,webp/quality,q_90',
       // });
       if (selectedBook.photo) {
         await ctx.telegram.sendChatAction(ctx.chat.id, 'upload_photo');
-        await ctx.replyWithPhoto(selectedBook.photo, bookDetailButtons(selectedBook, 'caption'));
-        // booksListButtonsDetail(books, 'caption')
-        // ctx.telegram.sendPhoto('', {}, {});
+        await ctx.replyWithPhoto(selectedBook.photo, bookDetailButtons(selectedBook, 'caption', existInFav));
       } else {
         console.log('default photo');
       }
@@ -81,6 +82,7 @@ const EventListener = {
     const bookId = matches[0].split('_')[1];
     const userTel = ctx.update.callback_query.from.id;
     let user = await User.findOne({ telId: userTel.id });
+    console.log(user);
     if (!user) {
       user = new User({
         telId: userTel.id,
@@ -88,10 +90,16 @@ const EventListener = {
         username: userTel.username,
         fav: [bookId],
       });
-    } else {
-      if (user.fav.includes(bookId)) user.fav.push(bookId);
-    }
+    } else if (!user.fav.includes(bookId)) {
+      user.fav.push(bookId);
+    } else user.fav = user.fav.filter((item) => item != bookId);
     await user.save();
-    ctx.reply('add to favorite');
+    ctx.telegram.editMessageReplyMarkup(
+      ctx.update.callback_query.message.chat.id,
+      ctx.update.callback_query.message.message_id,
+      undefined,
+      bookDetailButtons({ _id: bookId }, '', user.fav.includes(bookId)).reply_markup,
+    );
+    ctx.reply('عملیات موفقیت امیز بود');
   },
 };
