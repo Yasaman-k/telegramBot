@@ -82,7 +82,6 @@ const EventListener = {
     const bookId = matches[0].split('_')[1];
     const userTel = ctx.update.callback_query.from.id;
     let user = await User.findOne({ telId: userTel.id });
-    console.log(user);
     if (!user) {
       user = new User({
         telId: userTel.id,
