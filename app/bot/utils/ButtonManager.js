@@ -5,6 +5,7 @@ const MAIN_BUTTON_TEXT = {
   VIEW: 'ژانر ها',
   CREATEBook: 'create book',
   COMMENT: 'پیشنهادات و انتقادات',
+  FAV: 'لیست علاقه مندی ها',
 };
 
 // use  option+shift to select each line
@@ -12,7 +13,7 @@ const mainButtons = {
   reply_markup: {
     resize_keyboard: true,
     keyboard: [
-      [{ text: MAIN_BUTTON_TEXT.CREATEBook }],
+      [{ text: MAIN_BUTTON_TEXT.CREATEBook }, { text: MAIN_BUTTON_TEXT.FAV }],
       [{ text: MAIN_BUTTON_TEXT.CREATECat }, { text: MAIN_BUTTON_TEXT.VIEW }, { text: MAIN_BUTTON_TEXT.COMMENT }],
     ],
   },

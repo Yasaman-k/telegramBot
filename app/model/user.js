@@ -3,7 +3,7 @@ const { BookSchema } = require('./book');
 
 const schema = new mongoose.Schema({
   telId: Number,
-  fist_name: String,
+  first_name: String,
   username: String,
   fav: [
     {

@@ -35,6 +35,7 @@ const EventListener = {
   CAT: async (ctx, matches) => {
     const catId = matches[0].split('_')[1];
     const bookListData = await Book.find({ cat: catId });
+    console.log(bookListData, 'sss');
     ctx.reply(BOOK_LISTـMESSAGE, booksListButtons(bookListData));
   },
   BOOK: async (ctx, matches) => {
@@ -55,7 +56,6 @@ const EventListener = {
       } else {
         console.log('default photo');
       }
-      // await ctx.replyWithPhoto('AgACAgQAAxkBAAIDXGZ0ItuVib4DRXwWAaV7hNPAejHIAAJxwjEbqAABoFMUcH22TuPhVAEAAwIAA20AAzUE');
     } else {
       ctx.reply('book not found');
     }
@@ -80,7 +80,7 @@ const EventListener = {
   },
   FAV: async (ctx, matches) => {
     const bookId = matches[0].split('_')[1];
-    const userTel = ctx.update.callback_query.from.id;
+    const userTel = ctx.update.callback_query.from;
     let user = await User.findOne({ telId: userTel.id });
     if (!user) {
       user = new User({
