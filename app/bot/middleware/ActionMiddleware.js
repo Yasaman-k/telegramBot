@@ -1,6 +1,6 @@
 const Book = require('../../model/book');
 const User = require('../../model/user');
-const { booksListButtons, MAIN_BUTTON_TEXT, bookDetailButtons } = require('../utils/ButtonManager');
+const { booksListButtons, MAIN_BUTTON_TEXT, bookDetailButtons, sharedUseButtons } = require('../utils/ButtonManager');
 const { BOOK_LISTـMESSAGE, WRITE_CATEGORY_MESSAGE } = require('../utils/MessageHandler');
 const { KeyboardEventListener } = require('./Keyboardmiddleware');
 const { STATE_LIST } = require('./SessionMiddleware');
@@ -11,6 +11,7 @@ const actionMap = {
   BACK: /^BACK_\w+/,
   SEARCH: /^SEARCH/,
   FAV: /^FAV_\w+/,
+  CART: /^CART_\w+/,
 };
 
 module.exports = (ctx, next) => {
@@ -20,7 +21,6 @@ module.exports = (ctx, next) => {
     const actionValues = Object.values(actionMap);
     for (let i = 0; i < actionValues.length; i++) {
       const isMatch = callback_data.match(actionValues[i]);
-
       if (isMatch && EventListener[Object.keys(actionMap)[i]]) {
         return EventListener[Object.keys(actionMap)[i]](ctx, isMatch);
       }
@@ -35,7 +35,6 @@ const EventListener = {
   CAT: async (ctx, matches) => {
     const catId = matches[0].split('_')[1];
     const bookListData = await Book.find({ cat: catId });
-    console.log(bookListData, 'sss');
     ctx.reply(BOOK_LISTـMESSAGE, booksListButtons(bookListData));
   },
   BOOK: async (ctx, matches) => {
@@ -100,5 +99,11 @@ const EventListener = {
       bookDetailButtons({ _id: bookId }, '', user.fav.includes(bookId)).reply_markup,
     );
     ctx.reply('عملیات موفقیت امیز بود');
+  },
+  CART: (ctx, matches) => {
+    const bookId = matches[0].split('_')[1];
+    ctx.session.state = STATE_LIST.SHARED_USE;
+    ctx.session.bookId = bookId;
+    ctx.reply('نحوه استفاده از اموزش', sharedUseButtons);
   },
 };

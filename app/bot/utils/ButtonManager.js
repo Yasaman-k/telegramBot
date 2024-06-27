@@ -62,6 +62,20 @@ const commentsButtons = {
   },
 };
 
+const sharedUseButtons = {
+  reply_markup: {
+    resize_keyboard: true,
+    inline_keyboard: [
+      [
+        {
+          text: 'استفاده تکی',
+          callback_data: 'SHARED_USE_FALSE',
+        },
+      ],
+    ],
+  },
+};
+
 const categoryList = (data) => {
   return {
     reply_markup: {
@@ -122,4 +136,5 @@ module.exports = {
   commentsButtons,
   booksListButtonsDetail,
   bookDetailButtons,
+  sharedUseButtons,
 };

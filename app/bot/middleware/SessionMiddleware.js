@@ -10,6 +10,7 @@ const STATE_LIST = {
   ADDBOOK: 'addBook',
   COMMENT_TYPE_STATE: 'commentType',
   COMMENT_ENTER: 'commentEnter',
+  SHARED_USE: 'sharedUse',
 };
 
 module.exports = (ctx, next) => {

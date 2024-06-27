@@ -10,6 +10,7 @@ module.exports = (ctx, next) => {
   const text = ctx.message.text;
   if (text)
     if (Object.values(MAIN_BUTTON_TEXT).includes(text) && EventListener[text]) {
+      ctx.session.state = undefined;
       return EventListener[text](ctx);
     }
   // when i call next() func it  continues in project and  run another project
@@ -27,6 +28,7 @@ const EventListener = {
   },
   [MAIN_BUTTON_TEXT.COMMENT]: (ctx) => {
     ctx.session.state = STATE_LIST.COMMENT_TYPE_STATE;
+    ctx.session.comment = undefined;
     ctx.reply('پیشنهادات و انتقادات ', commentsButtons);
   },
   [MAIN_BUTTON_TEXT.FAV]: async (ctx) => {
