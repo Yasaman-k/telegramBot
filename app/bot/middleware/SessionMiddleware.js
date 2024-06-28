@@ -61,7 +61,7 @@ const EventListener = {
     if (ctx.update.callback_query) {
       const data = ctx.update.callback_query.data;
       ctx.session.state = STATE_LIST.COMMENT_ENTER;
-      ctx.session.comment = { commentType: data };
+      ctx.session.stateData = { commentType: data };
       ctx.reply('موضوع خود را بنوسیسد');
     } else {
       next();
@@ -69,14 +69,16 @@ const EventListener = {
   },
   [STATE_LIST.COMMENT_ENTER]: (ctx, next) => {
     ctx.session.state = undefined;
+    const commentType = ctx.session.stateData.commentType;
+    ctx.session.stateData = undefined;
     if (ctx.message) {
       const data = ctx.message.text;
       ctx.reply('comment grefte shod');
       ctx.telegram.sendMessage(
         process.env.ADMIN_ID,
-        adminCommentMessage({ type: ctx.session.comment.commentType, text: data }, ctx.message.from),
+        adminCommentMessage({ type: commentType, text: data }, ctx.message.from),
       );
-      ctx.session.comment = undefined;
+      ctx.session.stateData = undefined;
     } else {
       next();
     }

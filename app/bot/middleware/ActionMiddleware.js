@@ -103,7 +103,7 @@ const EventListener = {
   CART: (ctx, matches) => {
     const bookId = matches[0].split('_')[1];
     ctx.session.state = STATE_LIST.SHARED_USE;
-    ctx.session.bookId = bookId;
+    ctx.session.sateData = { bookId };
     ctx.reply('نحوه استفاده از اموزش', sharedUseButtons);
   },
 };
