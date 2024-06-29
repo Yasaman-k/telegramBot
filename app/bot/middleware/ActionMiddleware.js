@@ -1,3 +1,4 @@
+const { session } = require('telegraf');
 const Book = require('../../model/book');
 const User = require('../../model/user');
 const { booksListButtons, MAIN_BUTTON_TEXT, bookDetailButtons, sharedUseButtons } = require('../utils/ButtonManager');
@@ -12,6 +13,7 @@ const actionMap = {
   SEARCH: /^SEARCH/,
   FAV: /^FAV_\w+/,
   CART: /^CART_\w+/,
+  SHARED_USE: /^SHARED_USE_\w+/,
 };
 
 module.exports = (ctx, next) => {
@@ -105,5 +107,18 @@ const EventListener = {
     ctx.session.state = STATE_LIST.SHARED_USE;
     ctx.session.sateData = { bookId };
     ctx.reply('نحوه استفاده از اموزش', sharedUseButtons);
+  },
+  ACTION_USE: async (ctx, matches) => {
+    const shareUse = matches[0].split('_')[1];
+    const isShareUse = shareUse === 'TRUE';
+    let user = await User.findOne({ telId: userTel.id });
+    if (user) {
+      user.cart.push({
+        book: ctx.session.stateData.bookId,
+        shareUse: isShareUse,
+      });
+    }
+    ctx.session.stateData = undefined;
+    ctx.session.state = undefined;
   },
 };
