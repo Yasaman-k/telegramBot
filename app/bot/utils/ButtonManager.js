@@ -19,15 +19,15 @@ const mainButtons = {
   },
 };
 
-const bookDetailButtons = (book, caption = '', existInFav) => {
+const bookDetailButtons = (book, caption = '', existInFav, existInLibrary) => {
   return {
     reply_markup: {
       resize_keyboard: true,
       inline_keyboard: [
         [
           {
-            text: 'افزودن به کتابخانه',
-            callback_data: `CART_${book._id}`,
+            text: existInLibrary ? 'حذف از لیست کتابخانه' : 'افزودن به کتابخانه',
+            callback_data: `bookStorage_${book._id}`,
           },
         ],
         [
@@ -69,7 +69,13 @@ const sharedUseButtons = {
       [
         {
           text: 'استفاده تکی',
-          callback_data: 'SHARED_USE_FALSE',
+          callback_data: 'SHARED-USE_FALSE',
+        },
+      ],
+      [
+        {
+          text: 'استفاده گروهی',
+          callback_data: 'SHARED-USE_TRUE',
         },
       ],
     ],

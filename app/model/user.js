@@ -13,11 +13,26 @@ const schema = new mongoose.Schema({
   ],
   bookStorage: [
     {
-      bookId: mongoose.Schema.Types.ObjectId,
-      // ref: 'book',
+      book: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'book',
+      },
+      shareUse: Boolean,
     },
   ],
   buys: [BookSchema],
 });
 
-module.exports = mongoose.model('user', schema);
+const User = mongoose.model('user', schema);
+module.exports = User;
+module.exports.createUser = async (userTel, saveUser = true) => {
+  const user = new User({
+    telId: userTel.id,
+    first_name: userTel.first_name,
+    username: userTel.username,
+  });
+  if (saveUser) {
+    await user.save();
+  }
+  return user;
+};

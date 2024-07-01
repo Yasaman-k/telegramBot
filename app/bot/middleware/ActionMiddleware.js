@@ -1,10 +1,10 @@
-const { session } = require('telegraf');
 const Book = require('../../model/book');
 const User = require('../../model/user');
 const { booksListButtons, MAIN_BUTTON_TEXT, bookDetailButtons, sharedUseButtons } = require('../utils/ButtonManager');
 const { BOOK_LISTـMESSAGE, WRITE_CATEGORY_MESSAGE } = require('../utils/MessageHandler');
 const { KeyboardEventListener } = require('./Keyboardmiddleware');
 const { STATE_LIST } = require('./SessionMiddleware');
+const { createUser } = require('../../model/user');
 
 const actionMap = {
   CAT: /^CAT_\w+/,
@@ -12,8 +12,8 @@ const actionMap = {
   BACK: /^BACK_\w+/,
   SEARCH: /^SEARCH/,
   FAV: /^FAV_\w+/,
-  CART: /^CART_\w+/,
-  SHARED_USE: /^SHARED_USE_\w+/,
+  bookStorage: /^bookStorage_\w+/,
+  SHARED_USE: /^SHARED-USE_\w+/,
 };
 
 module.exports = (ctx, next) => {
@@ -42,18 +42,21 @@ const EventListener = {
   BOOK: async (ctx, matches) => {
     const bookId = matches[0].split('_')[1];
     const selectedBook = await Book.findById({ _id: bookId });
-    const userTel = ctx.update.callback_query.from.id;
+    const userTel = ctx.update.callback_query.from;
     let user = await User.findOne({ telId: userTel.id });
-
     if (selectedBook) {
       const existInFav = user?.fav?.includes(bookId);
       //  ctx.replyWithPhoto({ source: 'public/gatsby.jpeg' }, { caption: 'the great gatsby' });
       // ctx.replyWithPhoto({
       //   url: 'https://dkstatics-public.digikala.com/digikala-products/9257abcf926b66bfdfdcf550fa1e7db82f281628_1595165673.jpg?x-oss-process=image/resize,m_lfit,h_800,w_800/format,webp/quality,q_90',
       // });
+      const existInLibrary = user?.bookStorage?.some((item) => item.book == bookId);
       if (selectedBook.photo) {
         await ctx.telegram.sendChatAction(ctx.chat.id, 'upload_photo');
-        await ctx.replyWithPhoto(selectedBook.photo, bookDetailButtons(selectedBook, 'caption', existInFav));
+        await ctx.replyWithPhoto(
+          selectedBook.photo,
+          bookDetailButtons(selectedBook, 'caption', existInFav, existInLibrary),
+        );
       } else {
         console.log('default photo');
       }
@@ -84,40 +87,51 @@ const EventListener = {
     const userTel = ctx.update.callback_query.from;
     let user = await User.findOne({ telId: userTel.id });
     if (!user) {
-      user = new User({
-        telId: userTel.id,
-        first_name: userTel.first_name,
-        username: userTel.username,
-        fav: [bookId],
-      });
+      user = await createUser(userTel, false);
+      user.fav = [bookId];
     } else if (!user.fav.includes(bookId)) {
       user.fav.push(bookId);
     } else user.fav = user.fav.filter((item) => item != bookId);
     await user.save();
+    const existInLibrary = user?.bookStorage?.some((item) => item.book == bookId);
     ctx.telegram.editMessageReplyMarkup(
       ctx.update.callback_query.message.chat.id,
       ctx.update.callback_query.message.message_id,
       undefined,
-      bookDetailButtons({ _id: bookId }, '', user.fav.includes(bookId)).reply_markup,
+      bookDetailButtons({ _id: bookId }, '', user.fav.includes(bookId), existInLibrary).reply_markup,
     );
     ctx.reply('عملیات موفقیت امیز بود');
   },
-  CART: (ctx, matches) => {
+  bookStorage: async (ctx, matches) => {
     const bookId = matches[0].split('_')[1];
-    ctx.session.state = STATE_LIST.SHARED_USE;
-    ctx.session.sateData = { bookId };
-    ctx.reply('نحوه استفاده از اموزش', sharedUseButtons);
-  },
-  ACTION_USE: async (ctx, matches) => {
-    const shareUse = matches[0].split('_')[1];
-    const isShareUse = shareUse === 'TRUE';
+    const userTel = ctx.update.callback_query.from;
     let user = await User.findOne({ telId: userTel.id });
     if (user) {
-      user.cart.push({
-        book: ctx.session.stateData.bookId,
-        shareUse: isShareUse,
-      });
+      const existInLibrary = user.bookStorage.some((item) => item.book == bookId);
+      if (existInLibrary) {
+        user.bookStorage = user.bookStorage.filter((item) => item.book != bookId);
+        ctx.reply('محصول با موفقیت از کتابخانه شما حذف شد');
+        return await user.save();
+      }
     }
+    ctx.session.state = STATE_LIST.SHARED_USE;
+    ctx.session.stateData = { bookId };
+    ctx.reply('نحوه استفاده از اموزش', sharedUseButtons);
+  },
+  SHARED_USE: async (ctx, matches) => {
+    const shareUse = matches[0].split('_')[1];
+    const isShareUse = shareUse === 'TRUE';
+    const userTel = ctx.update.callback_query.from;
+    let user = await User.findOne({ telId: userTel.id });
+    if (!user) {
+      user = await createUser(userTel, false);
+    }
+    user.bookStorage.push({
+      book: ctx.session.stateData.bookId,
+      shareUse: isShareUse,
+    });
+    await user.save();
+    await ctx.reply('book add to library');
     ctx.session.stateData = undefined;
     ctx.session.state = undefined;
   },
